@@ -1,0 +1,99 @@
+name:                HFuzz
+version:             1.0.0
+-- synopsis:
+-- description:
+homepage:            https://gitlab.com/rmproject/implementation
+license:             BSD3
+author:              Robert Murray
+copyright:           2018 Robert Murray
+build-type:          Simple
+extra-source-files:  README.md
+cabal-version:       >=1.10
+
+library
+  hs-source-dirs:      src
+  exposed-modules:     HFuzz.Safe.Evaluation
+                     , HFuzz.Unsafe.Evaluation
+                     , HFuzz.Primitives.Boolean
+                     , HFuzz.Primitives.Cast
+                     , HFuzz.Primitives.Comparison
+                     , HFuzz.Primitives.Constants
+                     , HFuzz.Primitives.List
+                     , HFuzz.Primitives.Math
+                     , HFuzz.Primitives.Prim
+                     -- internal modules
+                     , HFuzz.Internal.Data.Bool
+                     , HFuzz.Internal.Evaluation.Laplace
+                     , HFuzz.Internal.Debug.Check
+                     , HFuzz.Internal.Evaluation.Evaluation
+                     , HFuzz.Internal.Types.Context
+                     , HFuzz.Internal.Types.Expr
+                     , HFuzz.Internal.Types.Sens
+                     , HFuzz.Internal.Types.Ty
+                     , HFuzz.Internal.Data.Value 
+  default-language:    Haskell2010
+  build-depends:       base >= 4.7 && < 5
+                     , integer-gmp
+                     , ghc-prim
+                     , symbol
+                     , typenums
+                     , containers
+                     , mwc-probability
+                     , mwc-random
+                     , primitive
+                     , transformers
+                     , lub
+                     , unamb
+  default-extensions:  DataKinds
+                     , GADTs
+                     , TypeOperators
+                     , FlexibleInstances
+                     , FlexibleContexts
+                     , KindSignatures
+                     , TypeFamilies
+                     , TypeApplications
+                     , PolyKinds
+                     , RankNTypes
+                     , ExplicitNamespaces
+                     , ScopedTypeVariables
+                     , ConstraintKinds
+                     , ExistentialQuantification
+
+test-suite test
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  main-is:             Spec.hs
+  other-modules:       HFuzz.Types.ContextSpec
+                     , HFuzz.Types.SensSpec
+                     , HFuzz.Types.ExprSpec
+                     , HFuzz.Evaluation.EvaluationSpec
+                     , HFuzz.Test.Common
+  build-depends:       base
+                     , HFuzz
+                     , hspec
+                     , QuickCheck
+                     , should-not-typecheck
+                     , deepseq
+                     , HUnit
+                     , typenums
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N -fno-warn-partial-type-signatures
+  default-language:    Haskell2010
+  default-extensions:  DataKinds
+                     , GADTs
+                     , TypeOperators
+                     , FlexibleInstances
+                     , FlexibleContexts
+                     , KindSignatures
+                     , TypeFamilies
+                     , TypeApplications
+                     , PolyKinds
+                     , TypeInType
+                     , RankNTypes
+                     , ExplicitNamespaces
+                     , ScopedTypeVariables
+                     , ConstraintKinds
+                     , ExistentialQuantification
+
+source-repository head
+  type:     git
+  location: https://gitlab.com/rmHFuzz/implementation
