@@ -12,7 +12,10 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs:      src
-  exposed-modules:     HFuzz.Safe.Evaluation
+  exposed-modules:     HFuzz
+                     , HFuzz.Internal
+                     -- user modules
+                     , HFuzz.Safe.Evaluation
                      , HFuzz.Unsafe.Evaluation
                      , HFuzz.Primitives.Boolean
                      , HFuzz.Primitives.Cast
