@@ -1,3 +1,5 @@
+{-# OPTIONS_GHC -fdefer-type-errors #-}
+
 -----------------------------------------------------------------------------
 -- |
 -- Module      :  HFuzz.Primitives.Boolean
@@ -19,8 +21,8 @@ module HFuzz.Primitives.Boolean (
     fand,
     for,
     fnot,
-    -- fuand,
-    -- fuor
+    fuand,
+    fuor
     ) where
 
 import HFuzz.Internal.Types.Expr
@@ -31,10 +33,10 @@ fand = XAbs (Var @"x") (XAbs (Var @"y") (XAnd (XVar (Var @"x")) (XVar (Var @"y")
 for = XAbs (Var @"x") (XAbs (Var @"y") (XOr (XVar (Var @"x")) (XVar (Var @"y"))))
 -- inf-sensitive boolean not function
 fnot = XAbs (Var @"x") (XNot (XVar (Var @"x")))
--- -- inf-sensitive uncurried boolean and function
--- fuand = XAbs (Var @"x") (XLet (Var @"a") (Var @"b") (XVar (Var @"x")) (XAnd (XVar (Var @"a")) (XVar (Var @"b"))))
--- -- inf-sensitive uncurried boolean or function
--- fuor = XAbs (Var @"x") (XLet (Var @"a") (Var @"b") (XVar (Var @"x")) (XOr (XVar (Var @"a")) (XVar (Var @"b"))))
+-- inf-sensitive uncurried boolean and function
+fuand = XAbs (Var @"x") (XLet (Var @"a") (Var @"b") (XVar (Var @"x")) (XAnd (XVar (Var @"a")) (XVar (Var @"b"))))
+-- inf-sensitive uncurried boolean or function
+fuor = XAbs (Var @"x") (XLet (Var @"a") (Var @"b") (XVar (Var @"x")) (XOr (XVar (Var @"a")) (XVar (Var @"b"))))
 
 -- boolean and
 band = XAnd

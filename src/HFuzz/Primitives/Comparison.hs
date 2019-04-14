@@ -1,4 +1,3 @@
-{-# LANGUAGE PartialTypeSignatures #-}
 {-# OPTIONS_GHC -fdefer-type-errors #-}
 
 -----------------------------------------------------------------------------
