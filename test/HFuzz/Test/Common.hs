@@ -16,7 +16,6 @@ module HFuzz.Test.Common (
     shouldTypecheck,
     shouldNotTypecheck,
     (:~:)(..),
-    type (/~),
     RatOfInt
     ) where
 
@@ -27,7 +26,6 @@ import Test.QuickCheck
 import Test.ShouldNotTypecheck (shouldNotTypecheck)
 import Control.DeepSeq
 import Control.Exception
-import qualified GHC.TypeLits as G
 import HFuzz.Internal.Types.Expr
 import qualified Data.TypeNums as TN
 
@@ -51,12 +49,5 @@ shouldTypecheck a = do
     case result of
         Right _              -> return ()
         Left (TypeError msg) -> assertFailure $ "Expected expression to compile but it did not compile: \n" ++ msg
-        -- Left (G.TypeError (G.Text msg)) -> assertFailure $ "Expected expression to compile but it did not compile: \n" ++ msg
-
-type family TyEQ a b where
-    TyEQ a a = True
-    TyEQ a b = False
-
-type a /~ b = TyEQ a b ~ False
 
 type RatOfInt (a :: TN.TInt) = a TN.:% 1
