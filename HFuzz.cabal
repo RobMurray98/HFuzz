@@ -2,8 +2,8 @@ name:                HFuzz
 version:             1.0.0
 -- synopsis:
 -- description:
-homepage:            https://gitlab.com/rmproject/implementation
-license:             BSD3
+homepage:            https://github.com/RobMurray98/HFuzz
+license:             MIT
 author:              Robert Murray
 copyright:           2018 Robert Murray
 build-type:          Simple
@@ -96,4 +96,4 @@ test-suite test
 
 source-repository head
   type:     git
-  location: https://gitlab.com/rmHFuzz/implementation
+  location: https://github.com/RobMurray98/HFuzz
