@@ -217,21 +217,19 @@ instance ToUExpr String where
 instance {-# OVERLAPPING #-} (ToUExpr a, ToUExpr b) => ToUExpr (a, b) where
     exprOf (x, y) = UXPair (exprOf x) (exprOf y) 
 
+instance {-# OVERLAPPING #-} ToUExpr Value where
+    exprOf (VBool a) = UXCBool a
+    exprOf (VInt a) = UXCInt a
+    exprOf (VNum a) = UXCNum a
+    exprOf (VString a) = UXCString a
+    exprOf (VList (x:xs)) = UXCons (exprOf x) (exprOf (VList xs))
+    exprOf (VList []) = UXCEmptyList
+    exprOf (VPair a b) = UXPair (exprOf a) (exprOf b)
+    exprOf VUnit = UXCUnit
+
 -- PRIVATE:
 
 type RuntimeContext = Map String Value
-
--- convert a Value to a constant constructor of UExpr such that it can be used in evaluation
-valueToUExpr :: Value -> UExpr
-valueToUExpr v = case v of
-    VBool b -> UXCBool b
-    VInt i -> UXCInt i
-    VNum n -> UXCNum n
-    VString s -> UXCString s
-    VList (x:xs) -> UXCons (valueToUExpr x) (valueToUExpr $ VList xs)
-    VList [] -> UXCEmptyList
-    VPair x y -> UXPair (valueToUExpr x) (valueToUExpr y)
-    VUnit -> UXCUnit
 
 -- helper function for building a left-fold
 formFoldl :: UExpr -> UExpr -> UExpr -> UExpr -> UExpr
@@ -343,25 +341,25 @@ evaluate' c (UXHead e) = case evaluate' c e of
     _ -> error "head operation applied to non-list type"
 evaluate' c (UXFoldl f n (UXCons x xs)) = evaluate' c $ formFoldl f n x xs
 evaluate' c (UXFoldl f n UXCEmptyList) = evaluate' c n
-evaluate' c (UXFoldl f n (UXVar x)) = evaluate' c $ UXFoldl f n (valueToUExpr $ evaluate' c $ UXVar x)
+evaluate' c (UXFoldl f n (UXVar x)) = evaluate' c $ UXFoldl f n (exprOf $ evaluate' c $ UXVar x)
 evaluate' c (UXFoldl f n _) = error "foldl applied to non-list value"
 evaluate' c (UXFoldr f n (UXCons x xs)) = evaluate' c $ formFoldr f n x xs
 evaluate' c (UXFoldr f n UXCEmptyList) = evaluate' c n
-evaluate' c (UXFoldr f n (UXVar x)) = evaluate' c $ UXFoldr f n (valueToUExpr $ evaluate' c $ UXVar x)
+evaluate' c (UXFoldr f n (UXVar x)) = evaluate' c $ UXFoldr f n (exprOf $ evaluate' c $ UXVar x)
 evaluate' c (UXFoldr f n _) = error "foldr applied to non-list value"
 evaluate' c (UXFoldl1 f (UXCons x UXCEmptyList)) = evaluate' c x
 evaluate' c (UXFoldl1 f (UXCons x (UXCons y ys))) = evaluate' c $ formFoldl f x y ys
-evaluate' c (UXFoldl1 f (UXVar x)) = evaluate' c $ UXFoldl1 f (valueToUExpr $ evaluate' c $ UXVar x)
+evaluate' c (UXFoldl1 f (UXVar x)) = evaluate' c $ UXFoldl1 f (exprOf $ evaluate' c $ UXVar x)
 evaluate' c (UXFoldl1 f UXCEmptyList) = error "foldl1 applied to empty list"
 evaluate' c (UXFoldl1 f _) = error "foldl1 applied to non-list value"
 evaluate' c (UXFoldr1 f (UXCons x UXCEmptyList)) = evaluate' c x
 evaluate' c (UXFoldr1 f (UXCons x (UXCons y ys))) = evaluate' c $ formFoldl f x y ys
-evaluate' c (UXFoldr1 f (UXVar x)) = evaluate' c $ UXFoldr1 f (valueToUExpr $ evaluate' c $ UXVar x)
+evaluate' c (UXFoldr1 f (UXVar x)) = evaluate' c $ UXFoldr1 f (exprOf $ evaluate' c $ UXVar x)
 evaluate' c (UXFoldr1 f UXCEmptyList) = error "foldr1 applied to empty list"
 evaluate' c (UXFoldr1 f _) = error "foldr1 applied to non-list value"
 evaluate' c (UXMap f (UXCons x xs)) = evaluate' c $ formMap f (UXCons x xs)
 evaluate' c (UXMap f UXCEmptyList) = VList []
-evaluate' c (UXMap f (UXVar x)) = evaluate' c $ UXMap f (valueToUExpr $ evaluate' c $ UXVar x)
+evaluate' c (UXMap f (UXVar x)) = evaluate' c $ UXMap f (exprOf $ evaluate' c $ UXVar x)
 evaluate' c (UXMap f _) = error "map applied to non-list value"
 
 -- conditional operations
