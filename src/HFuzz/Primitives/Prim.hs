@@ -17,6 +17,7 @@
 
 module HFuzz.Primitives.Prim (
     ref,
+    Var,
     xid,
     apply,
     apply2,
