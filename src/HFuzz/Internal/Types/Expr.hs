@@ -92,7 +92,7 @@ data Expr (xs :: Context) (ys :: Context) (t :: Ty) where
     XMap :: (ScaleCtx xs ys s ~ zs) => Expr xs xs (TLolli (TPrim pt1) s (TPrim pt2)) -> Expr xs ys (TPrim (PrimList n pt1)) -> Expr xs zs (TPrim (PrimList n pt2))
 
     -- conditional operations
-    XIfElse :: (CombineIfElse mb zs as ~ bs) => Expr xs ys (TPrim (Prim (BBool mb))) -> Expr ys zs t -> Expr ys as t -> Expr xs bs t
+    XIfElse :: (CombineIfElse mb zs as ~ bs) => Expr xs ys (TPrim (Prim (BBool mb))) -> Expr xs zs t -> Expr xs as t -> Expr xs bs t
     
     -- type-casting
     XCastIntBool :: (ScaleCtx xs ys SInf ~ as) => Expr xs ys (TPrim (Prim BInt)) -> Expr xs as (TPrim (Prim (BBool Nothing)))
@@ -183,7 +183,7 @@ type family NOT (x :: Maybe Bool) :: Maybe Bool where
     Not (Just x) = Just (Not x)
 
 type family CombineIfElse (b :: Maybe Bool) (as :: Context) (bs :: Context) where
-    CombineIfElse Nothing as bs = CtxAdd as bs
+    CombineIfElse Nothing as bs = CtxLub as bs
     CombineIfElse (Just True) as _ = as
     CombineIfElse (Just False) _ bs = bs
 

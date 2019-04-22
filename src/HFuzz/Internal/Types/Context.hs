@@ -28,6 +28,7 @@ module HFuzz.Internal.Types.Context (
     CtxCombine,
     CtxMatch,
     CtxAdd,
+    CtxLub,
     ScaleCtx,
     GetSens,
     GetAndRemoveFromCtx) where
@@ -97,6 +98,11 @@ type family CtxAdd (as :: Context) (bs :: Context) :: Context where
     -- CtxAdd as ((V b (ST s1 t)) ': bs) = CtxAdd' (GetAndRemoveFromCtx b as) (V b (ST s1 t)) bs
     CtxAdd ((V a (ST s1 t)) ': as) bs = CtxAdd' (GetAndRemoveFromCtx a bs) (V a (ST s1 t)) as
 
+-- find the least upper bound of two contexts
+type family CtxLub (as :: Context) (bs :: Context) :: Context where
+    CtxLub _ '[] = '[]
+    CtxLub as ((V b (ST s1 t)) ': bs) = CtxLub' (GetAndRemoveFromCtx b as) (V b (ST s1 t)) bs
+
 -- scale an input/output context pair by some sensitivity value
 type family ScaleCtx (xs :: Context) (ys :: Context) (s :: Sens) :: Context where
     ScaleCtx xs '[] _ = xs
@@ -111,10 +117,6 @@ type family GetAndRemoveFromCtx (x :: Symbol) (c :: Context) :: (Maybe (Symbol, 
     GetAndRemoveFromCtx x xs = GetAndRemoveFromCtx' x xs '[]
 
 -- PRIVATE:
-
-type family CtxLub (as :: Context) (bs :: Context) :: Context where
-    CtxLub _ '[] = '[]
-    CtxLub as ((V b (ST s1 t)) ': bs) = CtxLub' (GetAndRemoveFromCtx b as) (V b (ST s1 t)) bs
 
 type family CtxDiff (as :: Context) (bs :: Context) :: Context where
     CtxDiff _ '[] = '[]
