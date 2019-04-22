@@ -6,7 +6,7 @@ HFuzz implements an EDSL that creates a deep embedding for expressions which hav
 
 ## Usage
 
-Example: sum of a list using `xsum`, guaranteeing $0.1$-differential privacy.
+Example: importing `HFuzz`, sum of a list using `xsum`, guaranteeing $0.1$-differential privacy.
 
 ```haskell
 >> run1 xsum [1,2,3,4,5] 0.1
@@ -21,6 +21,8 @@ cswp = abs (Var @"p" @(PrimTens _ _)) (ifelse (xlet (Var @"a") (Var @"b") (ref (
 ```
 
 `cswp` is a $1$-sensitive function that swaps the values in a $\otimes$ pair if the second is less than the first. In order to reference `PrimTens` you must import `HFuzz.Internal`. The above definition requires deferred type erorrs to be enabled as it cannot be determined whether certain type constraints hold at compile time. At runtime we can use helper function `checkType` to enforce a starting context, and can determine its type by giving it a starting context to build from.
+
+You can access non-differentially private evaluation functions by importing `HFuzz.Unsafe`.
 
 ## Extension
 
