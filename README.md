@@ -16,8 +16,11 @@ Example: sum of a list using `xsum`, guaranteeing $0.1$-differential privacy.
 You can use various exported functions to construct your own programs which you can then use the evaluation functions on to evaluate in a differentially-private manner.
 
 ```haskell
-TODO
+-- requires deferred type errors
+cswp = abs (Var @"p" @(PrimTens _ _)) (ifelse (xlet (Var @"a") (Var @"b") (ref (Var @"p")) (xlt (ref (Var @"a")) (ref (Var @"b")))) (ref (Var @"p")) (swapT (XVar (Var @"p"))))
 ```
+
+`cswp` is a $1$-sensitive function that swaps the values in a $\otimes$ pair if the second is less than the first. In order to reference `PrimTens` you must import `HFuzz.Internal`. The above definition requires deferred type erorrs to be enabled as it cannot be determined whether certain type constraints hold at compile time. At runtime we can use helper function `checkType` to enforce a starting context, and can determine its type by giving it a starting context to build from.
 
 ## Extension
 
