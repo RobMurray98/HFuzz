@@ -55,7 +55,7 @@ data Expr (xs :: Context) (ys :: Context) (t :: Ty) where
     XCFalse :: Expr xs xs (TPrim (Prim (BBool (Just False))))
     XCEmptyList :: SPrimTy pt -> Expr xs xs (TPrim (PrimList 0 pt))
     XCListOfElem :: Expr xs ys (TPrim pt) -> Expr xs ys (TPrim (PrimList 1 pt))
-    XCString :: (KnownSymbol s) => Proxy s -> Expr xs xs (TPrim (Prim (BString (Just s))))
+    XCString :: (KnownSymbol s) => Proxy s -> Expr xs xs (TPrim (Prim BString))
     XCUnit :: Expr xs xs (TPrim (Prim BUnit))
     
     -- numerical operations

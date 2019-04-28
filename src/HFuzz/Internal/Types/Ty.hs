@@ -19,8 +19,7 @@ module HFuzz.Internal.Types.Ty (
     BaseTy(..),
     PrimTy(..),
     SPrimTy(..),
-    Unit(..),
-    TyOfPrimTy
+    Unit(..)
     ) where
 
 import HFuzz.Internal.Types.Sens
@@ -33,19 +32,6 @@ import GHC.TypeLits
 -- unit type
 data Unit = Unit
 
--- get the type of a base type
-type family TyOfBaseTy (b :: BaseTy) :: * where
-    TyOfBaseTy BInt = Int
-    TyOfBaseTy BNum = Double
-    TyOfBaseTy BUnit = Unit
-    TyOfBaseTy (BBool _) = Bool
-    TyOfBaseTy (BString _) = String
-
--- get the type of a primitive type
-type family TyOfPrimTy (p :: PrimTy) :: * where
-    TyOfPrimTy (PrimList _ pt) = [TyOfPrimTy pt]
-    TyOfPrimTy (Prim b) = TyOfBaseTy b
-
 data SPrimTy (pt :: PrimTy) where
     SPrimTy :: SPrimTy pt
 
@@ -55,13 +41,13 @@ data BaseTy where
     BNum :: BaseTy
     BUnit :: BaseTy
     BBool :: Maybe Bool -> BaseTy
-    BString :: Maybe Symbol -> BaseTy
+    BString :: BaseTy
 
 -- The primitive types available
 data PrimTy where
     PrimList :: Nat -> PrimTy -> PrimTy
     PrimTens :: PrimTy -> PrimTy -> PrimTy -- pair type which is eliminated by pattern matching
-    PrimAmp :: PrimTy -> PrimTy -> PrimTy -- pair type which is eliminated by HFuzzion
+    PrimAmp :: PrimTy -> PrimTy -> PrimTy -- pair type which is eliminated by projection
     Prim :: BaseTy -> PrimTy
 
 -- The types available - either a sensitivity-annotated function or a primitive type

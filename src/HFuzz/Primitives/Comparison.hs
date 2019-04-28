@@ -60,8 +60,7 @@ fult = XAbs (Var @"x") (XLet (Var @"a") (Var @"b") (XVar (Var @"x")) (XLT (XVar 
 fugte = XAbs (Var @"x") (XLet (Var @"a") (Var @"b") (XVar (Var @"x")) (XGTE (XVar (Var @"a")) (XVar (Var @"b"))))
 -- inf-sensitive uncurried less-than-or-equal comparison function
 fulte = XAbs (Var @"x") (XLet (Var @"a") (Var @"b") (XVar (Var @"x")) (XLTE (XVar (Var @"a")) (XVar (Var @"b"))))
-
--- requires deferred type errors
+-- 1-sensitive function that swaps the values in a pair if the second is less than the first
 cswp = XAbs (Var @"p" @(PrimTens _ _)) (XIfElse (XLet (Var @"a") (Var @"b") (XVar (Var @"p")) (XLT (XVar (Var @"a")) (XVar (Var @"b")))) (XVar (Var @"p")) (XSwapT (XVar (Var @"p"))))
 
 -- (==)
