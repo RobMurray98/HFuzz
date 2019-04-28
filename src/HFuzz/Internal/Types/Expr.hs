@@ -140,7 +140,7 @@ instance Show (Expr xs ys t) where
     show (XTimes x) = "XTimes (" ++ show x ++ ")"
     show (XSwapT x) = "XSwapT (" ++ show x ++ ")"
     show (XSwapA x) = "XSwapA (" ++ show x ++ ")"
-    show (XLet x y e1 e2) = "XLet (" ++ (symbolVal $ varToString x) ++ ", " ++ (symbolVal $ varToString y) ++ ") = " ++ show e1 ++ " in " ++ show e2
+    show (XLet x y e1 e2) = "XLet (" ++ (symbolVal $ varToString x) ++ ", " ++ (symbolVal $ varToString y) ++ ") = (" ++ show e1 ++ ") in (" ++ show e2 ++ ")"
     show (XFstA x) = "XFstA (" ++ show x ++ ")"
     show (XSndA x) = "XSndA (" ++ show x ++ ")"
     show (XCons x xs) = "XCons (" ++ show x ++ ") (" ++ show xs ++ ")"

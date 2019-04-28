@@ -51,15 +51,15 @@ flte = XAbs (Var @"x") (XAbs (Var @"y") (XLTE (XVar (Var @"x")) (XVar (Var @"y")
 -- TODO: can we compile these without deferred type errors?
 
 -- inf-sensitive uncurried equality comparison function
-fueq = XAbs (Var @"x") (XLet (Var @"a") (Var @"b") (XVar (Var @"x")) (XEQ (XVar (Var @"a")) (XVar (Var @"b"))))
+fueq = XAbs (Var @"x" @(PrimTens _ _)) (XLet (Var @"a") (Var @"b") (XVar (Var @"x")) (XEQ (XVar (Var @"a")) (XVar (Var @"b"))))
 -- inf-sensitive uncurried greater-than comparison function
-fugt = XAbs (Var @"x") (XLet (Var @"a") (Var @"b") (XVar (Var @"x")) (XGT (XVar (Var @"a")) (XVar (Var @"b"))))
+fugt = XAbs (Var @"x" @(PrimTens _ _)) (XLet (Var @"a") (Var @"b") (XVar (Var @"x")) (XGT (XVar (Var @"a")) (XVar (Var @"b"))))
 -- inf-sensitive uncurried less-than comparison function
-fult = XAbs (Var @"x") (XLet (Var @"a") (Var @"b") (XVar (Var @"x")) (XLT (XVar (Var @"a")) (XVar (Var @"b"))))
+fult = XAbs (Var @"x" @(PrimTens _ _)) (XLet (Var @"a") (Var @"b") (XVar (Var @"x")) (XLT (XVar (Var @"a")) (XVar (Var @"b"))))
 -- inf-sensitive uncurried greater-than-or-equal comparison function
-fugte = XAbs (Var @"x") (XLet (Var @"a") (Var @"b") (XVar (Var @"x")) (XGTE (XVar (Var @"a")) (XVar (Var @"b"))))
+fugte = XAbs (Var @"x" @(PrimTens _ _)) (XLet (Var @"a") (Var @"b") (XVar (Var @"x")) (XGTE (XVar (Var @"a")) (XVar (Var @"b"))))
 -- inf-sensitive uncurried less-than-or-equal comparison function
-fulte = XAbs (Var @"x") (XLet (Var @"a") (Var @"b") (XVar (Var @"x")) (XLTE (XVar (Var @"a")) (XVar (Var @"b"))))
+fulte = XAbs (Var @"x" @(PrimTens _ _)) (XLet (Var @"a") (Var @"b") (XVar (Var @"x")) (XLTE (XVar (Var @"a")) (XVar (Var @"b"))))
 -- 1-sensitive function that swaps the values in a pair if the second is less than the first
 cswp = XAbs (Var @"p" @(PrimTens _ _)) (XIfElse (XLet (Var @"a") (Var @"b") (XVar (Var @"p")) (XLT (XVar (Var @"a")) (XVar (Var @"b")))) (XVar (Var @"p")) (XSwapT (XVar (Var @"p"))))
 
